@@ -1,0 +1,24 @@
+services:
+  master:
+    build: .
+    environment:
+      LOCUST_HOST: #Inserire il nome del container target (host interno fastapi)
+    ports:
+     - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master
+    networks:
+      - default
+        
+  worker:
+    build: .
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host master
+    networks:
+      - default
+
+networks:
+  default:
+    name: esercitazione-esame-finale-load-test_default
